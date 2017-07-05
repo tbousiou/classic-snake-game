@@ -3,6 +3,8 @@ var scl = 20;
 
 var food;
 
+
+// Setup function for p5.js
 function setup() {
   createCanvas(600, 600);
 	s = new Snake();
