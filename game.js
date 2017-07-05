@@ -1,8 +1,15 @@
-var s;
-var scl = 20;
 
-var food;
+// Global variables
+var s;					// snake object
+var scl = 20;		// scale or grid size
+var food;				// food object
 
+var	directions = {
+		UP: 0,
+		RIGHT: 1,
+		DOWN: 2,
+		LEFT: 3	
+};
 
 // Setup function for p5.js
 function setup() {
@@ -13,16 +20,12 @@ function setup() {
   
 }
 
-function pickLocation() {
-	var cols = floor(width/scl);
-	var rows = floor(height/scl);
-	food = createVector(floor(random(cols)), floor(random(rows)));
-	food.mult(scl);
-}
-
+// Draw function for p5.js
 function draw() {
-  background(51);
+	// Clear background  
+	background(51);
 	
+	// pick new location for food if it gets eaten	
 	if (s.eat(food)) {
 		pickLocation();
 	}	
@@ -32,28 +35,42 @@ function draw() {
 	s.show();
 	
 	
-
+	// Draw the food
 	fill(255, 0, 100);
 	rect(food.x, food.y, scl, scl);
 }
 
+
+// Generates the coordinates for the food object
+function pickLocation() {
+	var cols = floor(width/scl);
+	var rows = floor(height/scl);
+	food = createVector(floor(random(cols)), floor(random(rows)));
+	food.mult(scl);
+}
+
+
+// Arrow keys control
 function keyPressed() {
-  if (keyCode === UP_ARROW) {
-    s.dir(0, -1);
-  } else if (keyCode === DOWN_ARROW) {
-    s.dir(0, 1);
+  if ((keyCode === UP_ARROW) && (s.current_direction !== directions.DOWN)) {
+    s.setDirection(directions.UP);
+  } else if ((keyCode === DOWN_ARROW) && (s.current_direction !== directions.UP)) {
+    s.setDirection(directions.DOWN);
 	}
-  else if (keyCode === LEFT_ARROW) {
-    s.dir(-1, 0);
+  else if ((keyCode === LEFT_ARROW) && (s.current_direction !== directions.RIGHT)) {
+    s.setDirection(directions.LEFT);
 	}
-  else if (keyCode === RIGHT_ARROW) {
-    s.dir(1, 0);
+  else if ((keyCode === RIGHT_ARROW) && (s.current_direction !== directions.LEFT)) {
+    s.setDirection(directions.RIGHT);
 	}
 }
 
+
+// Snake object definition
 function Snake() {
 	this.x = 0;
 	this.y = 0;
+	this.current_direction = directions.RIGHT;
 	this.xspeed = 1;
 	this.yspeed = 0;
 	this.total = 0;
@@ -69,9 +86,33 @@ function Snake() {
 		}
 	}  
 
-	this.dir = function(x, y) {
-		this.xspeed = x;
-		this.yspeed = y;
+	this.setDirection = function(dir) {
+		switch(dir) {
+			case directions.UP:
+				this.xspeed = 0;
+				this.yspeed = -1;
+				this.current_direction = directions.UP;
+				break;
+			case directions.RIGHT:
+				this.xspeed = 1;
+				this.yspeed = 0;
+				this.current_direction = directions.RIGHT;
+				break;
+			case directions.DOWN:
+				this.xspeed = 0;
+				this.yspeed = 1;
+				this.current_direction = directions.DOWN;
+				break;
+			case directions.LEFT:
+				this.xspeed = -1;
+				this.yspeed = 0;
+				this.current_direction = directions.LEFT;
+				break;
+			default:
+				this.xspeed = 0;
+				this.yspeed = 0;
+		}		
+
 	}	
 
 
