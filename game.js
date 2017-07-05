@@ -1,4 +1,3 @@
-
 // Global variables
 var s;					// snake object
 var scl = 20;		// scale or grid size
@@ -11,12 +10,20 @@ var	directions = {
 		LEFT: 3	
 };
 
+
+function preload() {
+	backgroundSound = loadSound('assets/Fantasy_Game_Background_Looping.mp3');
+  foodSound = loadSound('assets/Jump-SoundBible.com-1007297584.mp3');
+}
+
 // Setup function for p5.js
 function setup() {
   createCanvas(600, 600);
 	s = new Snake();
 	frameRate(10);
 	pickLocation();
+	//foodSound.setVolume(0.1);
+  backgroundSound.loop();
   
 }
 
@@ -27,6 +34,7 @@ function draw() {
 	
 	// pick new location for food if it gets eaten	
 	if (s.eat(food)) {
+		foodSound.play();
 		pickLocation();
 	}	
 
